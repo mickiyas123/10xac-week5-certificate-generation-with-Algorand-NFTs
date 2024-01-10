@@ -25,3 +25,4 @@ logs
 
 # Env
 .env
+/back-end/Download/base_certificate_image_url.json
