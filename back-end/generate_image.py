@@ -2,7 +2,6 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 from pathlib import Path
-import json
 import requests
 import concurrent.futures
 import random
