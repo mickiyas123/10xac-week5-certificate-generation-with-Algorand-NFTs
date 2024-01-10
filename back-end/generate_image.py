@@ -14,7 +14,6 @@ file_path = DATA_DIR.joinpath("base_certificate_image_url.json")
 
 DATA_DIR.mkdir(exist_ok=True)
 subfolder_path.mkdir(parents=True, exist_ok=True)
-certificate_path = subfolder_path.joinpath("certificate_1.png")
 
 
 load_dotenv()
@@ -40,15 +39,15 @@ prompts = [
     "Clean, beautiful, elegant, and simple \
     certificate background with a combination \
     of black and gold colors with a placeholder \
-    to write the name and other information.",
+    to write the name and other information the image should be landscape",
     "Clean, beautiful, elegant, and simple \
     certificate background with a combination \
     of black and silver colors with a placeholder \
-    to write the name and other information.",
+    to write the name and other information the image should be landscape",
     "Clean, beautiful, elegant, and simple \
     certificate background with a combination \
     of black and bronze colors with a placeholder \
-    to write the name and other information.",
+    to write the name and other information the image should be landscape",
 ]
 
 
