@@ -13,7 +13,7 @@ file_path = DATA_DIR.joinpath("base_certificate_image_url.json")
 
 DATA_DIR.mkdir(exist_ok=True)
 subfolder_path.mkdir(parents=True, exist_ok=True)
-certificate_path = subfolder_path.joinpath("certificate_1.jpg")
+certificate_path = subfolder_path.joinpath("certificate_1.png")
 
 
 load_dotenv()
