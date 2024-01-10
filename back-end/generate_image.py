@@ -4,7 +4,9 @@ import os
 from pathlib import Path
 import json
 import requests
-
+import concurrent.futures
+import random
+import string
 
 DATA_DIR = Path.cwd() / "Download"
 subfolder_name = "Certificates"
@@ -18,40 +20,47 @@ certificate_path = subfolder_path.joinpath("certificate_1.png")
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 
 def generate_cretificate_background(prompt):
-    client = OpenAI(api_key=OPENAI_API_KEY)
-
     response = client.images.generate(
         model="dall-e-3",
         prompt=prompt,
         size="1024x1024",
-        quality="standard",
         n=1,
         response_format="url",
     )
-    data_to_save = {"url": response.data[0].url}
-    with open(file_path, mode="w", encoding="utf-8") as file:
-        json.dump(data_to_save, file)
+    file_name = "".join(random.choices(string.ascii_letters, k=5))
+    download_generated_image(
+        response.data[0].url, subfolder_path.joinpath(f"certificate_{file_name}.png")
+    )
 
 
-# generate_cretificate_background(
-#     "Clean, beautiful, elegant, and simple \
-#     certificate background with combination of black and gold colors with \
-#     placeholder to write name and other information with the corect spelling"
-#     )
-
-with open(file_path, "r", encoding="utf-8") as file:
-    data = json.load(file)
-
-image_url = data["url"]
+prompts = [
+    "Clean, beautiful, elegant, and simple \
+    certificate background with a combination \
+    of black and gold colors with a placeholder \
+    to write the name and other information.",
+    "Clean, beautiful, elegant, and simple \
+    certificate background with a combination \
+    of black and silver colors with a placeholder \
+    to write the name and other information.",
+    "Clean, beautiful, elegant, and simple \
+    certificate background with a combination \
+    of black and bronze colors with a placeholder \
+    to write the name and other information.",
+]
 
 
 def download_generated_image(image_url, path):
-    image_data = requests.get(image_url)
-    with open(path, "wb") as file:
-        file.write(image_data.content)
+    try:
+        image_data = requests.get(image_url)
+        with open(path, "wb") as file:
+            file.write(image_data.content)
+    except requests.exceptions.RequestException as e:
+        print(f"Error downloading image: {e}")
 
 
-download_generated_image(image_url, certificate_path)
+with concurrent.futures.ThreadPoolExecutor() as executor:
+    executor.map(generate_cretificate_background, prompts)
