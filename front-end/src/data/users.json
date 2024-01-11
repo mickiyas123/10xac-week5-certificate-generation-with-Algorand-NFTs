@@ -1,0 +1,82 @@
+{
+  "users": [
+    {
+      "name": "John Doe",
+      "age": 25,
+      "role": "Staff",
+      "password": "1234"
+    },
+    {
+      "name": "Jane Doe",
+      "age": 22,
+      "role": "Trainee",
+      "weekly_challenge_score": 85,
+      "password": "1234",
+      "certificate_status_approval": ""
+    },
+    {
+      "name": "Bob Smith",
+      "age": 30,
+      "role": "Trainee",
+      "weekly_challenge_score": 88,
+      "password": "1234",
+      "certificate_status_approval": ""
+    },
+    {
+      "name": "Alice Johnson",
+      "age": 28,
+      "role": "Trainee",
+      "weekly_challenge_score": 92,
+      "password": "1234",
+      "certificate_status_approval": ""
+    },
+    {
+      "name": "Charlie Brown",
+      "age": 26,
+      "role": "Trainee",
+      "weekly_challenge_score": 75,
+      "password": "1234",
+      "certificate_status_approval": ""
+    },
+    {
+      "name": "Eva White",
+      "age": 29,
+      "role": "Trainee",
+      "weekly_challenge_score": 91,
+      "password": "1234",
+      "certificate_status_approval": ""
+    },
+    {
+      "name": "David Miller",
+      "age": 23,
+      "role": "Trainee",
+      "weekly_challenge_score": 80,
+      "password": "1234",
+      "certificate_status_approval": ""
+    },
+    {
+      "name": "Sophia Taylor",
+      "age": 27,
+      "role": "Trainee",
+      "weekly_challenge_score": 89,
+      "password": "1234",
+      "certificate_status_approval": ""
+    },
+    {
+      "name": "Frank Johnson",
+      "age": 31,
+      "role": "Trainee",
+      "weekly_challenge_score": 78,
+      "password": "1234",
+      "certificate_status_approval": ""
+    },
+    {
+      "name": "Olivia Davis",
+      "age": 24,
+      "role": "Trainee",
+      "weekly_challenge_score": 93,
+      "password": "1234",
+      "certificate_status_approval": ""
+    }
+  ]
+}
