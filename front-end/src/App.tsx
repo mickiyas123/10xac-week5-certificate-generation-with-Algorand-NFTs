@@ -1,49 +1,36 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import axios from 'axios';
-
+import { Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Certificate from "./pages/Certificate";
+import NavBar from "./components/NavBar";
+import { AuthProvider } from "./context/Auth";
+import { RequireAuth } from "./components/RequireAuth";
 function App() {
-  const [count, setCount] = useState(0);
-  const [homeRoute, setHomeRoute] = useState()
-
-
-const handleSubmit = (e) => {
-  e.preventDefault();
-  axios.get("http://localhost:800").then((response) => {
-    console.log(response.status, response.data)
-  })
-}
-
   return (
-    <>
-    <form onSubmit={handleSubmit}>
-      <h1>Click button to connect to backend</h1>
-      <h1>{homeRoute}</h1>
-      <button type="submit">Click</button>
-    </form>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <AuthProvider>
+      <>
+        <NavBar />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <RequireAuth>
+                <Home />
+              </RequireAuth>
+            }
+          ></Route>
+          <Route
+            path="/certificates"
+            element={
+              <RequireAuth>
+                <Certificate />
+              </RequireAuth>
+            }
+          ></Route>
+          <Route path="/login" element={<Login />}></Route>
+        </Routes>
+      </>
+    </AuthProvider>
   );
 }
 
