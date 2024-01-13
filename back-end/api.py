@@ -11,6 +11,7 @@ from pydantic import BaseModel
 from typing import List
 import cv2 as cv
 from datetime import date
+import algokit_utils as algokit
 
 app = FastAPI()
 
@@ -184,3 +185,22 @@ def generate_bronze_certificate(certificate_params: Certificate_Params):
         return {"Message": "Succesfuly created gold certificate"}
     except Exception as e:
         return {"Error": f"Error editing gold certificate image: {e}"}
+    
+
+@app.post("/create-algorand-account")
+def create_algorand_account():
+    my_account = algokit.Account.new_account()
+    algod = algokit.get_algod_client(
+        algokit.get_default_localnet_config("algod")
+        )
+    algokit.get_kmd_client_from_algod_client(algod)
+    algokit.ensure_funded(
+        algod,
+        algokit.EnsureBalanceParameters(
+            account_to_fund=my_account,
+            min_spending_balance_micro_algos=1_000_000_000
+        )
+    )
+    return my_account
+    
+
