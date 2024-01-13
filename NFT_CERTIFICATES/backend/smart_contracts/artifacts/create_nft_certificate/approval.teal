@@ -1,0 +1,234 @@
+#pragma version 8
+intcblock 0 1 4
+bytecblock 0x617361 0x6173615f616d6f756e74 0x7472616e736665725f746f 0x
+txn NumAppArgs
+intc_0 // 0
+==
+bnz main_l8
+txna ApplicationArgs 0
+pushbytes 0x2826b202 // "opt_into_asset(asset)void"
+==
+bnz main_l7
+txna ApplicationArgs 0
+pushbytes 0x06183836 // "transfer_asset(pay,axfer)void"
+==
+bnz main_l6
+txna ApplicationArgs 0
+pushbytes 0x02bece11 // "hello(string)string"
+==
+bnz main_l5
+err
+main_l5:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub hellocaster_7
+intc_1 // 1
+return
+main_l6:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub transferassetcaster_6
+intc_1 // 1
+return
+main_l7:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub optintoassetcaster_5
+intc_1 // 1
+return
+main_l8:
+txn OnCompletion
+intc_0 // NoOp
+==
+bnz main_l12
+txn OnCompletion
+intc_1 // OptIn
+==
+bnz main_l11
+err
+main_l11:
+txn ApplicationID
+intc_0 // 0
+!=
+assert
+callsub optin_2
+intc_1 // 1
+return
+main_l12:
+txn ApplicationID
+intc_0 // 0
+==
+assert
+callsub create_0
+intc_1 // 1
+return
+
+// create
+create_0:
+proto 0 0
+bytec_0 // "asa"
+intc_0 // 0
+app_global_put
+bytec_1 // "asa_amount"
+intc_0 // 0
+app_global_put
+bytec_2 // "transfer_to"
+bytec_3 // ""
+app_global_put
+retsub
+
+// opt_into_asset
+optintoasset_1:
+proto 1 0
+bytec_0 // "asa"
+app_global_get
+intc_0 // 0
+==
+assert
+bytec_0 // "asa"
+frame_dig -1
+txnas Assets
+app_global_put
+itxn_begin
+intc_2 // axfer
+itxn_field TypeEnum
+global CurrentApplicationAddress
+itxn_field AssetReceiver
+frame_dig -1
+txnas Assets
+itxn_field XferAsset
+intc_0 // 0
+itxn_field AssetAmount
+intc_0 // 0
+itxn_field Fee
+itxn_submit
+retsub
+
+// opt_in
+optin_2:
+proto 0 0
+intc_1 // 1
+return
+
+// transfer_asset
+transferasset_3:
+proto 2 0
+bytec_1 // "asa_amount"
+frame_dig -1
+gtxns AssetAmount
+app_global_put
+bytec_2 // "transfer_to"
+frame_dig -2
+gtxns Sender
+app_global_put
+itxn_begin
+intc_2 // axfer
+itxn_field TypeEnum
+bytec_2 // "transfer_to"
+app_global_get
+itxn_field AssetReceiver
+bytec_0 // "asa"
+app_global_get
+itxn_field XferAsset
+bytec_1 // "asa_amount"
+app_global_get
+itxn_field AssetAmount
+bytec_1 // "asa_amount"
+app_global_get
+itxn_field AssetCloseTo
+intc_0 // 0
+itxn_field Fee
+itxn_submit
+retsub
+
+// hello
+hello_4:
+proto 1 1
+bytec_3 // ""
+pushbytes 0x48656c6c6f2c20 // "Hello, "
+frame_dig -1
+extract 2 0
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// opt_into_asset_caster
+optintoassetcaster_5:
+proto 0 0
+intc_0 // 0
+txna ApplicationArgs 1
+intc_0 // 0
+getbyte
+frame_bury 0
+frame_dig 0
+callsub optintoasset_1
+retsub
+
+// transfer_asset_caster
+transferassetcaster_6:
+proto 0 0
+intc_0 // 0
+dup
+txn GroupIndex
+pushint 2 // 2
+-
+frame_bury 0
+frame_dig 0
+gtxns TypeEnum
+intc_1 // pay
+==
+assert
+txn GroupIndex
+intc_1 // 1
+-
+frame_bury 1
+frame_dig 1
+gtxns TypeEnum
+intc_2 // axfer
+==
+assert
+frame_dig 0
+frame_dig 1
+callsub transferasset_3
+retsub
+
+// hello_caster
+hellocaster_7:
+proto 0 0
+bytec_3 // ""
+dup
+txna ApplicationArgs 1
+frame_bury 1
+frame_dig 1
+callsub hello_4
+frame_bury 0
+pushbytes 0x151f7c75 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
