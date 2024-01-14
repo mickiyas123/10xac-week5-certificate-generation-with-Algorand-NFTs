@@ -2,10 +2,13 @@ import { useState, createContext, useContext } from "react";
 import usersData from "../data/users.json";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAtom } from "jotai";
+import { errorMessage } from "../global_state/global_state";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
+  let [errorMsg, setErrorMsg] = useAtom(errorMessage);
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
@@ -19,6 +22,7 @@ export const AuthProvider = ({ children }) => {
         setUser(foundUser);
         localStorage.setItem("user", JSON.stringify(foundUser));
       } else {
+        setErrorMsg("Invalid Username or password");
         toast.error("Invalid Username or password", {
           position: "top-right",
           autoClose: 5000,
@@ -31,6 +35,7 @@ export const AuthProvider = ({ children }) => {
         });
       }
     } catch (error) {
+      setErrorMsg("Error during login");
       toast.error("Error during login", {
         position: "top-right",
         autoClose: 5000,

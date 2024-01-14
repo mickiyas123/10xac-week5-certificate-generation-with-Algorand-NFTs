@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { useAuth } from "../context/Auth";
 import { useNavigate } from "react-router-dom";
+import { errorMessage } from "../global_state/global_state";
+import { useAtom } from "jotai";
+import { useEffect } from "react";
 const Login = () => {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg] = useAtom(errorMessage);
   const auth = useAuth();
   const navigate = useNavigate();
   const handleLogin = (e) => {
@@ -11,8 +15,12 @@ const Login = () => {
     auth.login(username, password);
     navigate("/");
   };
+  useEffect(() => {}, [errorMsg]);
   return (
     <div>
+      <div className="text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong className="font-bold">{errorMsg}</strong>
+      </div>
       <div className="flex items-center min-h-screen p-4 bg-gray-100 lg:justify-center">
         <div className="flex flex-col overflow-hidden bg-white rounded-md shadow-lg max md:flex-row md:flex-1 lg:max-w-screen-md">
           <div className="p-5 bg-white md:flex-1">
